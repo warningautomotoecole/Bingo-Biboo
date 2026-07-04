@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bingo — Tirage de Biboo</title>
+    
+    <!-- === PWA MANIFEST === -->
+    <link rel="manifest" href="manifest.json" />
+    <!-- === ICÔNES POUR APPLE === -->
+    <link rel="apple-touch-icon" href="assets/img/icon.png" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Bingo Biboo" />
+    <meta name="theme-color" content="#A061FF" />
+    
+    <!-- === ICÔNES CLASSIQUES === -->
+    <link rel="icon" type="image/png" href="assets/img/icon.png" />
+    
+    <link rel="stylesheet" href="style.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+    <div class="app">
+        <!-- Arrière-plan animé Liquid Glass -->
+        <div class="liquid-bg">
+            <div class="blob blob-purple"></div>
+            <div class="blob blob-lime"></div>
+        </div>
+
+        <!-- BOUTON D'INSTALLATION (caché par défaut) -->
+        <button id="install-btn" class="install-btn" style="display:none;">📲 Installer l'application</button>
+
+        <header class="app-header">
+            <h1>Le tirage de Biboo</h1>
+            <div class="header-actions">
+                <button id="sound-toggle" class="icon-btn" aria-label="Basculer le son">
+                    <span class="icon">🔊</span>
+                </button>
+                <button id="theme-toggle" class="icon-btn" aria-label="Basculer le thème">
+                    <span class="icon">☀️</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- ========== CONTENEUR TROIS COLONNES ========== -->
+        <div class="three-col-layout">
+
+            <!-- ===== COLONNE GAUCHE ===== -->
+            <div class="left-col">
+
+                <!-- Configuration -->
+                <section class="control-card">
+                    <div class="header-split">
+                        <h2 class="section-title">Configuration</h2>
+                    </div>
+                    
+                    <div class="control-group">
+                        <label class="control-label">Format du jeu</label>
+                        <div class="segmented-control" id="format-control">
+                            <button class="segment active" data-value="75">75 (US)</button>
+                            <button class="segment" data-value="90">90 (EU)</button>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label">Mode de tirage</label>
+                        <div class="segmented-control" id="mode-control">
+                            <button class="segment active" data-value="manual">Manuel</button>
+                            <button class="segment" data-value="auto">Auto</button>
+                        </div>
+                    </div>
+
+                    <div class="speed-group-wrapper" id="speed-group">
+                        <label class="control-label">Vitesse d'intervalle</label>
+                        <div class="segmented-control" id="speed-control">
+                            <button class="segment" data-value="1000">1s</button>
+                            <button class="segment" data-value="2000">2s</button>
+                            <button class="segment active" data-value="5000">5s</button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Tirage classique -->
+                <section class="control-card">
+                    <div class="header-split">
+                        <h2 class="section-title">Tirage Classique</h2>
+                    </div>
+                    <button id="btn-tirer" class="primary-btn lime-btn">Tirer une boule</button>
+                </section>
+
+                <!-- Tirage ciblé -->
+                <section class="control-card custom-card" id="custom-card">
+                    <div class="header-split">
+                        <h2 class="section-title">Tirage Ciblé</h2>
+                    </div>
+                    <p class="custom-hint">Définissez le nombre de boules par colonne</p>
+
+                    <div class="custom-grid" id="custom-grid"></div>
+
+                    <button id="btn-custom-tirer" class="primary-btn purple-btn">Tirer (Ciblé)</button>
+                </section>
+
+            </div> <!-- fin left-col -->
+
+            <!-- ===== COLONNE CENTRALE ===== -->
+            <div class="center-col">
+                <!-- Résultats (statut + boules) -->
+                <section class="result-card">
+                    <div class="draw-status" id="draw-status">Prêt à tirer</div>
+                    <div class="balls-container" id="balls-container"></div>
+                </section>
+
+                <!-- Historique -->
+                <section class="history-card" id="history-card">
+                    <div class="history-header">
+                        <span class="history-label">Historique récent</span>
+                        <button id="btn-clear-history" class="clear-history-btn">Effacer</button>
+                    </div>
+                    <div class="history-balls" id="history-balls">
+                        <span class="empty-history">Aucun tirage enregistré</span>
+                    </div>
+                </section>
+            </div> <!-- fin center-col -->
+
+            <!-- ===== COLONNE DROITE ===== -->
+            <div class="right-col">
+                <section class="board-card" id="board-container">
+                    <h2 class="section-title">Répartition des numéros</h2>
+                    <div id="board-wrapper"></div>
+                </section>
+            </div> <!-- fin right-col -->
+
+        </div> <!-- fin three-col-layout -->
+
+        <footer class="app-footer">
+            <p>Design by IKIGAI Agency • Made in French Polynesia</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+    
+    <!-- Enregistrement du Service Worker -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then(reg => console.log('Service Worker enregistré !'))
+                    .catch(err => console.log('Erreur SW', err));
+            });
+        }
+    </script>
+</body>
+</html>
